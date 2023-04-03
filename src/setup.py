@@ -8,7 +8,7 @@ setup(
     version="0.0.1",
     packages=find_packages(),
     scripts=[
-        os.path.join("citroen", "training", "processing.py"),
-        os.path.join("citroen", "training", "train.py"),
+        os.path.join("citroen", "training", "processing"),
+        os.path.join("citroen", "training", "train"),
     ],
 )
