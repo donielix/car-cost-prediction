@@ -2,4 +2,5 @@ awswrangler==3.0.0
 mlflow==2.3.0
 scikeras[tensorflow]==0.10.0
 scikit-learn==1.2.2
+scipy==1.10.1 
 tensorflow==2.12.0
