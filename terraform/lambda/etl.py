@@ -4,9 +4,32 @@ import awswrangler as wr
 
 
 def lambda_handler(event, context):
-    print("Received event: " + json.dumps(event))
+    """
+    This function is a Lambda function that processes CSV data from S3 and writes
+    it to Parquet format to another S3 path.
 
-    # Get the object from the event
+    Args
+    ----
+    * `event`: The event object from AWS Lambda.
+    * `context`: The context object from AWS Lambda.
+
+    It does the following:
+
+    1. Loads the CSV data from S3.
+    2. Renames the columns.
+    3. Drops unneeded columns.
+    4. Performs some transformations.
+    5. Enforces the schema.
+    6. Adds partition columns.
+    7. Writes the data to Parquet format.
+
+    Returns
+    -------
+    * A dictionary with a status code of 201
+    """
+    print("Received event: " + json.dumps(event))
+    OUTPUT_PATH = "s3://citroen-cost-prediction/proccesed-data"
+    # Get the object from the event and show its content type
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     key = urllib.parse.unquote_plus(
         event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
@@ -43,6 +66,8 @@ def lambda_handler(event, context):
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     df.drop(columns=["categoria", "duracion"], inplace=True)
     print("Done!")
+    print("Performing some transformations...")
+    df["consumo_medio"] = df["consumo_medio"] / 100
     print("Enforcing schema...")
     df = df.astype(
         {
@@ -65,11 +90,9 @@ def lambda_handler(event, context):
     print("Writing to parquet...")
     wr.s3.to_parquet(
         df,
-        path="s3://citroen-cost-prediction/proccesed-data",
+        path=OUTPUT_PATH,
         dataset=True,
         partition_cols=["year", "month"],
-        database="citroen-database",
-        table="citroen_processed",
         mode="append",
     )
     print("Done!")
