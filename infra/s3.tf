@@ -40,3 +40,14 @@ resource "aws_s3_object" "dvc-data" {
   key     = var.dvc_data
   content = "This is the dvc data folder"
 }
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.citroen-cost-prediction.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.processing_lambda_function.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".csv"
+    filter_prefix       = var.raw_data_name
+  }
+}

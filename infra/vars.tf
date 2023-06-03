@@ -51,8 +51,27 @@ variable "glue_table" {
   type        = string
 }
 
+variable "lambda_runtime" {
+  default     = "python3.10"
+  description = "The runtime for AWS Lambda"
+  type        = string
+
+}
+
 variable "lambda_processing_name" {
   default     = "citroen-s3-processing"
   description = "The name of the AWS Lambda processing function"
+  type        = string
+}
+
+variable "lambda_dedup_name" {
+  default     = "citroen-s3-deduplication"
+  description = "The name of the AWS Lambda deduplicating function"
+  type        = string
+}
+
+variable "eventbridge_name" {
+  default     = "daily-lambda-dedup"
+  description = "The name of the EventBridge resource"
   type        = string
 }

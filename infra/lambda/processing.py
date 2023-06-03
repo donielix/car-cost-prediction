@@ -1,4 +1,5 @@
 import json
+import os
 import urllib.parse
 import awswrangler as wr
 
@@ -28,7 +29,7 @@ def lambda_handler(event, context):
     * A dictionary with a status code of 201
     """
     print("Received event: " + json.dumps(event))
-    OUTPUT_PATH = "s3://citroen-cost-prediction/proccesed-data"
+    OUTPUT_PATH = os.environ["OUTPUT_PATH"]
     # Get the object from the event and show its content type
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     key = urllib.parse.unquote_plus(

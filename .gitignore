@@ -2,6 +2,7 @@
 **/*egg-info
 **/build
 /data
+/.data
 **/__pycache__
 **/.terraform*
 **/terraform.tfstate
