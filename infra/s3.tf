@@ -28,3 +28,15 @@ resource "aws_s3_object" "dedup-data" {
   key     = var.dedup_data_name
   content = "This is the dedup data folder"
 }
+
+resource "aws_s3_object" "mlflow-artifacts" {
+  bucket  = aws_s3_bucket.citroen-cost-prediction.id
+  key     = var.mlflow_artifacts
+  content = "This is the mlflow artifacts folder"
+}
+
+resource "aws_s3_object" "dvc-data" {
+  bucket  = aws_s3_bucket.citroen-cost-prediction.id
+  key     = var.dvc_data
+  content = "This is the dvc data folder"
+}
