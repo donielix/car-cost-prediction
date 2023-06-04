@@ -27,6 +27,56 @@ resource "aws_glue_catalog_table" "citroen_table" {
         "serialization.format" = 1
       }
     }
+    # Specify the table schema
+    columns {
+      name = "fecha"
+      type = "date"
+    }
+
+    columns {
+      name = "hora_salida"
+      type = "string"
+    }
+
+    columns {
+      name = "hora_llegada"
+      type = "string"
+    }
+
+    columns {
+      name = "direccion_origen"
+      type = "string"
+    }
+
+    columns {
+      name = "direccion_destino"
+      type = "string"
+    }
+
+    columns {
+      name = "distancia"
+      type = "double"
+    }
+
+    columns {
+      name = "kilometraje"
+      type = "int"
+    }
+
+    columns {
+      name = "consumo_medio"
+      type = "double"
+    }
+
+    columns {
+      name = "precio_carburante"
+      type = "double"
+    }
+
+    columns {
+      name = "coste"
+      type = "double"
+    }
   }
 
   # Specify the table columns and partition keys
@@ -38,56 +88,5 @@ resource "aws_glue_catalog_table" "citroen_table" {
   partition_keys {
     name = "month"
     type = "string"
-  }
-
-  # Specify the table schema
-  columns {
-    name = "fecha"
-    type = "date"
-  }
-
-  columns {
-    name = "hora_salida"
-    type = "string"
-  }
-
-  columns {
-    name = "hora_llegada"
-    type = "string"
-  }
-
-  columns {
-    name = "direccion_origen"
-    type = "string"
-  }
-
-  columns {
-    name = "direccion_destino"
-    type = "string"
-  }
-
-  columns {
-    name = "distancia"
-    type = "double"
-  }
-
-  columns {
-    name = "kilometraje"
-    type = "int"
-  }
-
-  columns {
-    name = "consumo_medio"
-    type = "double"
-  }
-
-  columns {
-    name = "precio_carburante"
-    type = "double"
-  }
-
-  columns {
-    name = "coste"
-    type = "double"
   }
 }

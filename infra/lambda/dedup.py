@@ -1,11 +1,15 @@
 import json
+import os
 import awswrangler as wr
 
 
 def lambda_handler(event, context):
     print("Received event: " + json.dumps(event))
-    INPUT_PATH = "s3://citroen-cost-prediction/proccesed-data"
-    OUTPUT_PATH = "s3://citroen-cost-prediction/dedup-data"
+    INPUT_PATH = os.environ["INPUT_PATH"]
+    OUTPUT_PATH = os.environ["OUTPUT_PATH"]
+    ATHENA_DATABASE = os.environ["ATHENA_DATABASE"]
+    ATHENA_TABLE = os.environ["ATHENA_TABLE"]
+    ATHENA_WORKGROUP = os.environ["ATHENA_WORKGROUP"]
     print("Reading data...")
     df = wr.s3.read_parquet(INPUT_PATH, dataset=True)
     print("Done!")
@@ -34,6 +38,12 @@ def lambda_handler(event, context):
             "month": "string",
         },
     )
+    SQL = f"MSCK REPAIR TABLE {ATHENA_DATABASE}.{ATHENA_TABLE}"
+    print(f"Repairing table with: {SQL}")
+    result = wr.athena.start_query_execution(
+        sql=SQL, workgroup=ATHENA_WORKGROUP, wait=True
+    )
+    print(f"Reparinig result: {result}")
     print("Done!")
     return {
         "status": 201,

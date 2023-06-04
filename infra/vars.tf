@@ -52,7 +52,7 @@ variable "glue_table" {
 }
 
 variable "lambda_runtime" {
-  default     = "python3.10"
+  default     = "python3.9"
   description = "The runtime for AWS Lambda"
   type        = string
 
@@ -73,5 +73,17 @@ variable "lambda_dedup_name" {
 variable "eventbridge_name" {
   default     = "daily-lambda-dedup"
   description = "The name of the EventBridge resource"
+  type        = string
+}
+
+variable "lambda_timeout" {
+  default     = 180
+  description = "Number of seconds for Lambda timeout"
+  type        = number
+}
+
+variable "athena_workgroup_name" {
+  default     = "citroen_workgroup"
+  description = "The name for the workgroup for Athena"
   type        = string
 }

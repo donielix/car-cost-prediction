@@ -5,4 +5,5 @@
 /.data
 **/__pycache__
 **/.terraform*
-**/terraform.tfstate
+**/terraform.tfstate*
+**/*.zip

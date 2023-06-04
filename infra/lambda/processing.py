@@ -95,6 +95,20 @@ def lambda_handler(event, context):
         dataset=True,
         partition_cols=["year", "month"],
         mode="append",
+        dtype={
+            "fecha": "date",
+            "hora_salida": "string",
+            "hora_llegada": "string",
+            "direccion_origen": "string",
+            "direccion_destino": "string",
+            "distancia": "double",
+            "kilometraje": "int",
+            "consumo_medio": "double",
+            "precio_carburante": "double",
+            "coste": "double",
+            "year": "string",
+            "month": "string",
+        },
     )
     print("Done!")
     return {"status": 201}
