@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+import argparse
 from typing import List
+
+import numpy as np
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-import numpy as np
+from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
 
 class ExponentialModel(BaseEstimator, RegressorMixin):
@@ -12,7 +15,7 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
     @staticmethod
     def _model_func(x, w0, w1, w2, w3):
         distance = x[:, 0]
-        mileage = x[:, 1]
+        # mileage = x[:, 1]
         fuel_price = x[:, 2]
 
         consumption = w0 + w1 * np.exp(-w2 * distance + w3)
@@ -38,3 +41,27 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
         # Input validation
         X = check_array(X)
         return self._model_func(X, *self.best_params_)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="Training script",
+        description="Fits the model according to the data passed",
+        epilog="End of help",
+    )
+    parser.add_argument(
+        "--training-data", type=str, required=True, help="Source path for training data"
+    )
+    parser.add_argument(
+        "--hyperparams-file",
+        type=str,
+        required=True,
+        help="Source path for hyperparameters file",
+    )
+    parser.add_argument(
+        "--artifacts-data",
+        type=str,
+        required=True,
+        help="Path where to store output artifacts",
+    )
+    args = parser.parse_args()
