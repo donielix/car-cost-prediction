@@ -1,5 +1,0 @@
-[core]
-    remote = origin
-    autostage = true
-['remote "origin"']
-    url = s3://dvc-data-20230403
