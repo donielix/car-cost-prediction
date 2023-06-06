@@ -93,7 +93,7 @@ def save_data(
     test.to_parquet(os.path.join(path, "test.parquet"), index=False)
 
 
-def main(args: argparse.Namespace):
+def main():
     """
     Execute the main functionality of this script.
 
@@ -111,29 +111,17 @@ def main(args: argparse.Namespace):
     -------
     None
 
-    Examples
-    --------
-    >>> import argparse
-    >>> parser = argparse.ArgumentParser(description='My script')
-    >>> parser.add_argument(
-        '--database', type=str, help='The name of the Athena database to query'
-        )
-    >>> parser.add_argument(
-        '--data', type=str, help='The path to save the parquet files to'
-        )
-    >>> args = parser.parse_args()
-    >>> main(args)
-
     This will execute the main functionality of the script using the command-line
     arguments passed to it.
     """
+    args = parse_args()
     with open(_HERE / "data.sql") as sql_file:
         SQL = sql_file.read()
     df = pull_data(query=SQL, database=args.database)
     save_data(df=df, path=args.data, test_size=0.2)
 
 
-if __name__ == "__main__":
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="Pulling script",
         description="Pulls the data from AWS S3 into the data folder",
@@ -151,8 +139,12 @@ if __name__ == "__main__":
         "--database",
         type=str,
         required=False,
-        default="citroen-database",
+        default="citroen_database",
         help="AWS Glue database",
     )
     args = parser.parse_args()
-    main(args)
+    return args
+
+
+if __name__ == "__main__":
+    main()

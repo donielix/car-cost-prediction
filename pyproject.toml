@@ -25,6 +25,9 @@ pre-commit = "*"
 ipykernel = "*"
 mypy = "*"
 
+[tool.poetry.scripts]
+pull = "src.data.pull:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
