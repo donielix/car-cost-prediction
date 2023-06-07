@@ -7,3 +7,5 @@
 **/.terraform*
 **/terraform.tfstate*
 **/*.zip
+**/.cache
+**/.mypy_cache
