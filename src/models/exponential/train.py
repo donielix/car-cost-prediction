@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import argparse
+import ast
 from typing import List
 
+# import mlflow.sklearn
 import numpy as np
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
@@ -43,25 +45,29 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
         return self._model_func(X, *self.best_params_)
 
 
-if __name__ == "__main__":
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="Training script",
         description="Fits the model according to the data passed",
         epilog="End of help",
     )
+
     parser.add_argument(
-        "--training-data", type=str, required=True, help="Source path for training data"
-    )
-    parser.add_argument(
-        "--hyperparams-file",
-        type=str,
+        "-i",
+        "--initial-params",
+        type=ast.literal_eval,
         required=True,
-        help="Source path for hyperparameters file",
+        help="Initial parameters",
     )
-    parser.add_argument(
-        "--artifacts-data",
-        type=str,
-        required=True,
-        help="Path where to store output artifacts",
-    )
+
     args = parser.parse_args()
+    return args
+
+
+def main():
+    args = parse_args()
+    print(f"Initial params: {args.initial_params}")
+
+
+if __name__ == "__main__":
+    main()

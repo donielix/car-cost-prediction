@@ -1,13 +1,17 @@
 
-FROM python:3.9
+FROM python:3.10
 
 ENV PYTHONUNBUFFERED=1
+ARG POETRY=1.5.1
 
 WORKDIR /code
 
-COPY requirements.txt setup.py ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -U pip setuptools wheel && \
+    pip install poetry==${POETRY}
 
-COPY citroen/ citroen/
-RUN pip install --no-cache-dir . && \
-    rm -rf setup.py requirements.txt
+COPY poetry.lock pyproject.toml README.md ./
+COPY src/ ./src/
+RUN chmod +x src/models/exponential/train.py
+
+RUN poetry install --no-dev
+ENTRYPOINT [ "poetry", "run", "src/models/exponential/train.py" ]

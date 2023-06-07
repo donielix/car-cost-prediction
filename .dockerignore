@@ -1,0 +1,11 @@
+.data/
+.dvc/cache/
+.dvc/tmp/
+.mypy_cache/
+.vscode/
+data/
+db/
+infra/
+notebooks/
+scripts/
+.dockerignore
