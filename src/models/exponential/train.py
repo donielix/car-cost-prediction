@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 import argparse
 import ast
+import os
 from typing import List
 
-# import mlflow.sklearn
+import mlflow
+import mlflow.sklearn
 import numpy as np
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
+
+from src.utils.read import read_parquet_or_csv
+from src.utils.split import split_X_y_df
 
 
 class ExponentialModel(BaseEstimator, RegressorMixin):
@@ -60,6 +67,15 @@ def parse_args() -> argparse.Namespace:
         help="Initial parameters",
     )
 
+    parser.add_argument(
+        "-d",
+        "--data",
+        type=str,
+        default=os.path.join(os.getcwd(), "data"),
+        required=False,
+        help="Where to load data from",
+    )
+
     args = parser.parse_args()
     return args
 
@@ -67,6 +83,20 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     print(f"Initial params: {args.initial_params}")
+    df = read_parquet_or_csv(path=args.data)
+    train, test = train_test_split(df, test_size=0.2, random_state=42)
+    X_train, y_train, X_test, y_test = split_X_y_df(
+        train=train, test=test, target="coste"
+    )
+    with mlflow.start_run():
+        model = ExponentialModel(initial_params=args.initial_params)
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        scoring = mean_squared_error(y_true=y_test, y_pred=y_pred)
+        mlflow.log_artifact(train)
+        mlflow.log_param("MSE", scoring)
+        mlflow.sklearn.log_model(sk_model=model)
+    print("Training completed!")
 
 
 if __name__ == "__main__":
