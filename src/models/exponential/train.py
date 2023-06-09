@@ -10,10 +10,9 @@ import numpy as np
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
-from src.utils.read import read_parquet_or_csv
+from src.utils.read import join_path, read_parquet_or_csv
 from src.utils.split import split_X_y_df
 
 
@@ -76,26 +75,48 @@ def parse_args() -> argparse.Namespace:
         help="Where to load data from",
     )
 
+    parser.add_argument(
+        "-t",
+        "--train-name",
+        type=str,
+        default="train.parquet",
+        required=False,
+        help="The name of the training dataset",
+    )
+
+    parser.add_argument(
+        "-v",
+        "--validation-name",
+        type=str,
+        default="test.parquet",
+        required=False,
+        help="The name of the validation dataset",
+    )
+
     args = parser.parse_args()
     return args
 
 
 def main():
+    TARGET_FIELD = "coste"
     args = parse_args()
     print(f"Initial params: {args.initial_params}")
-    df = read_parquet_or_csv(path=args.data)
-    train, test = train_test_split(df, test_size=0.2, random_state=42)
+    train = read_parquet_or_csv(path=join_path(args.data, args.train_name, sep="/"))
+    test = read_parquet_or_csv(path=join_path(args.data, args.validation_name, sep="/"))
+
     X_train, y_train, X_test, y_test = split_X_y_df(
-        train=train, test=test, target="coste"
+        train=train, test=test, target=TARGET_FIELD
     )
-    with mlflow.start_run():
+    with mlflow.start_run() as run:  # noqa: F841
         model = ExponentialModel(initial_params=args.initial_params)
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
         scoring = mean_squared_error(y_true=y_test, y_pred=y_pred)
-        mlflow.log_artifact(train)
-        mlflow.log_param("MSE", scoring)
-        mlflow.sklearn.log_model(sk_model=model)
+        mlflow.log_artifact("data")
+        mlflow.log_param("best_params", model.best_params_)
+        mlflow.log_metric("MSE", scoring)
+        mlflow.log_metric("estimation_err", model.estimation_err_)
+        mlflow.sklearn.log_model(sk_model=model, artifact_path="model")
     print("Training completed!")
 
 
