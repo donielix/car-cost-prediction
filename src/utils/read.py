@@ -1,6 +1,7 @@
 import os
 from functools import reduce
-from typing import Optional, Union
+from pathlib import Path
+from typing import Dict, Optional, Union
 
 import awswrangler as wr
 import pandas as pd
@@ -108,3 +109,55 @@ def join_path(*paths: str, sep: Optional[str] = None) -> str:
         return sep.join([path_1, path_2])  # type: ignore
 
     return reduce(_joint_two_paths, paths)
+
+
+def get_folder_permissions(folder_path) -> str:
+    """
+    Retrieve the permissions of a specified folder.
+
+    Args
+    ----
+    - `folder_path` (str): The path to the folder.
+
+    Returns
+    -------
+    - `str`: The permissions of the folder in octal representation.
+
+    Raises
+    ------
+    - `FileNotFoundError`: If the specified folder is not found.
+    """
+    return oct(os.stat(folder_path).st_mode)[-3:]
+
+
+def get_owner_and_group_ids(directory_path: Union[str, Path]) -> Dict[str, str]:
+    """
+    Get the owner and group IDs of a directory.
+
+    Args
+    ----
+    - `directory_path` (str or pathlib.Path): The path to the directory.
+
+    Returns
+    -------
+    - `dict`: A dictionary containing the owner ID (str) and group ID (str)
+    of the directory. If the directory does not exist, the values will be None.
+
+    Raises:
+        ValueError: If the directory does not exist.
+    """
+    # Convert the directory path to a Path object
+    directory = Path(directory_path)
+
+    # Check if the directory exists
+    if directory.exists():
+        # Retrieve the owner ID and group ID
+        owner_id = directory.owner()
+        group_id = directory.group()
+
+        # Return a dictionary containing the owner ID and group ID
+        return {"owner_id": owner_id, "group_id": group_id}
+
+    else:
+        # Handle the case when the directory does not exist
+        raise ValueError("Directory does not exist.")

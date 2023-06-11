@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import argparse
 import ast
+import getpass
+import logging
 import os
+import platform
 from typing import List
 
-import mlflow
 import mlflow.sklearn
 import numpy as np
 from scipy.optimize import curve_fit
@@ -12,8 +14,37 @@ from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.metrics import mean_squared_error
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
-from src.utils.read import join_path, read_parquet_or_csv
+import mlflow
+from src.utils.read import (
+    get_folder_permissions,
+    get_owner_and_group_ids,
+    join_path,
+    read_parquet_or_csv,
+)
 from src.utils.split import split_X_y_df
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+def setup_logger() -> logging.Logger:
+    # Set up logger
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    # Create console handler and set level to debug
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+
+    # Create formatter
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+
+    # Add formatter to console handler
+    console_handler.setFormatter(formatter)
+
+    # Add console handler to logger
+    logger.addHandler(console_handler)
+
+    return logger
 
 
 class ExponentialModel(BaseEstimator, RegressorMixin):
@@ -93,31 +124,47 @@ def parse_args() -> argparse.Namespace:
         help="The name of the validation dataset",
     )
 
+    parser.add_argument(
+        "-m",
+        "--mlflow-tracking",
+        required=False,
+        help="The MLFlow tracking uri",
+    )
+
     args = parser.parse_args()
     return args
 
 
 def main():
     TARGET_FIELD = "coste"
+    logger = setup_logger()
+    logger.debug(f"Current user: {getpass.getuser()}")
+    logger.debug(f"Current host: {platform.node()}")
     args = parse_args()
-    print(f"Initial params: {args.initial_params}")
+    logger.debug(f"Input arguments: {args}")
+    logger.info(f"Initial params: {args.initial_params}")
     train = read_parquet_or_csv(path=join_path(args.data, args.train_name, sep="/"))
     test = read_parquet_or_csv(path=join_path(args.data, args.validation_name, sep="/"))
+    logger.debug(f"Train dataset size: {len(train)}\nTest dataset size: {len(test)}")
 
     X_train, y_train, X_test, y_test = split_X_y_df(
         train=train, test=test, target=TARGET_FIELD
     )
+    if args.mlflow_tracking:
+        mlflow.set_tracking_uri(args.mlflow_tracking)
     with mlflow.start_run() as run:  # noqa: F841
         model = ExponentialModel(initial_params=args.initial_params)
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
         scoring = mean_squared_error(y_true=y_test, y_pred=y_pred)
+        logger.debug(f"Data folder permissions: {get_folder_permissions('data')}")
+        logger.debug(f"Data folder owner: {get_owner_and_group_ids('data')}")
         mlflow.log_artifact("data")
         mlflow.log_param("best_params", model.best_params_)
+        mlflow.log_param("estimation_err", model.estimation_err_)
         mlflow.log_metric("MSE", scoring)
-        mlflow.log_metric("estimation_err", model.estimation_err_)
         mlflow.sklearn.log_model(sk_model=model, artifact_path="model")
-    print("Training completed!")
+    logger.info("Training completed!")
 
 
 if __name__ == "__main__":

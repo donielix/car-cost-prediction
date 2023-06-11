@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "name": "Training",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/models/exponential/train.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "args": ["-i", "[.1, .2, .3, .4]", "-m", "http://localhost:5000"]
+    }
+  ]
+}

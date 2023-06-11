@@ -183,17 +183,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.26.147"
+version = "1.26.151"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.147-py3-none-any.whl", hash = "sha256:45ed158defbf554d051c4f3eae9a1ca3c1039dd29a528e884f47a06ad0ac17a1"},
-    {file = "boto3-1.26.147.tar.gz", hash = "sha256:ccfbdb6e9ebdf943e222c88c9a8f161a8a607f3dbdbf3b1b0eed25c1d8cb215e"},
+    {file = "boto3-1.26.151-py3-none-any.whl", hash = "sha256:20b88a8145845e4923d438f5f89fdbdac5bae4011e706cd0974ac69c41f258b4"},
+    {file = "boto3-1.26.151.tar.gz", hash = "sha256:81bff32c96a6b4b203beb63826214d8cf24ca1a86e81d43bbb688a21c5d79e2a"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.147,<1.30.0"
+botocore = ">=1.29.151,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -202,13 +202,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.147"
+version = "1.29.151"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.147-py3-none-any.whl", hash = "sha256:67a7ce69fc6d44a881b01964a76edb00b4e87723a8cc596339d306d8eb321fec"},
-    {file = "botocore-1.29.147.tar.gz", hash = "sha256:f7433bcce5ef7baad2fdd29f97c9fdcf8de4ec1cf577ae308901caf778ed48c2"},
+    {file = "botocore-1.29.151-py3-none-any.whl", hash = "sha256:0790bf5d25ad6f2db3450797251a78fbcb7b72cdeeb2fd0b82c2668a41d9f41c"},
+    {file = "botocore-1.29.151.tar.gz", hash = "sha256:fdaaa34ea5f09666f17d24d2f4179f7ec81dd6f831ef6b785d4552f919291cab"},
 ]
 
 [package.dependencies]
@@ -1269,12 +1269,12 @@ files = [
 
 [[package]]
 name = "jax"
-version = "0.4.11"
+version = "0.4.12"
 description = "Differentiate, compile, and transform Numpy code."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jax-0.4.11.tar.gz", hash = "sha256:8b1cd443b698339df8d8807578ee141e5b67e36125b3945b146f600177d60d79"},
+    {file = "jax-0.4.12.tar.gz", hash = "sha256:d2de9a2388ffe002f16506d3ad1cc6e34d7536b98948e49c7e05bbcfe8e57998"},
 ]
 
 [package.dependencies]
@@ -1285,17 +1285,17 @@ scipy = ">=1.7"
 
 [package.extras]
 australis = ["protobuf (>=3.13,<4)"]
-ci = ["jaxlib (==0.4.10)"]
-cpu = ["jaxlib (==0.4.11)"]
-cuda = ["jaxlib (==0.4.11+cuda11.cudnn86)"]
-cuda11-cudnn82 = ["jaxlib (==0.4.11+cuda11.cudnn82)"]
-cuda11-cudnn86 = ["jaxlib (==0.4.11+cuda11.cudnn86)"]
-cuda11-local = ["jaxlib (==0.4.11+cuda11.cudnn86)"]
-cuda11-pip = ["jaxlib (==0.4.11+cuda11.cudnn86)", "nvidia-cublas-cu11 (>=11.11)", "nvidia-cuda-cupti-cu11 (>=11.8)", "nvidia-cuda-nvcc-cu11 (>=11.8)", "nvidia-cuda-runtime-cu11 (>=11.8)", "nvidia-cudnn-cu11 (>=8.8)", "nvidia-cufft-cu11 (>=10.9)", "nvidia-cusolver-cu11 (>=11.4)", "nvidia-cusparse-cu11 (>=11.7)"]
-cuda12-local = ["jaxlib (==0.4.11+cuda12.cudnn88)"]
-cuda12-pip = ["jaxlib (==0.4.11+cuda12.cudnn88)", "nvidia-cublas-cu12", "nvidia-cuda-cupti-cu12", "nvidia-cuda-nvcc-cu12", "nvidia-cuda-runtime-cu12", "nvidia-cudnn-cu12 (>=8.9)", "nvidia-cufft-cu12", "nvidia-cusolver-cu12", "nvidia-cusparse-cu12"]
-minimum-jaxlib = ["jaxlib (==0.4.7)"]
-tpu = ["jaxlib (==0.4.11)", "libtpu-nightly (==0.1.dev20230531)"]
+ci = ["jaxlib (==0.4.11)"]
+cpu = ["jaxlib (==0.4.12)"]
+cuda = ["jaxlib (==0.4.12+cuda11.cudnn86)"]
+cuda11-cudnn82 = ["jaxlib (==0.4.12+cuda11.cudnn82)"]
+cuda11-cudnn86 = ["jaxlib (==0.4.12+cuda11.cudnn86)"]
+cuda11-local = ["jaxlib (==0.4.12+cuda11.cudnn86)"]
+cuda11-pip = ["jaxlib (==0.4.12+cuda11.cudnn86)", "nvidia-cublas-cu11 (>=11.11)", "nvidia-cuda-cupti-cu11 (>=11.8)", "nvidia-cuda-nvcc-cu11 (>=11.8)", "nvidia-cuda-runtime-cu11 (>=11.8)", "nvidia-cudnn-cu11 (>=8.8)", "nvidia-cufft-cu11 (>=10.9)", "nvidia-cusolver-cu11 (>=11.4)", "nvidia-cusparse-cu11 (>=11.7)"]
+cuda12-local = ["jaxlib (==0.4.12+cuda12.cudnn88)"]
+cuda12-pip = ["jaxlib (==0.4.12+cuda12.cudnn88)", "nvidia-cublas-cu12", "nvidia-cuda-cupti-cu12", "nvidia-cuda-nvcc-cu12", "nvidia-cuda-runtime-cu12", "nvidia-cudnn-cu12 (>=8.9)", "nvidia-cufft-cu12", "nvidia-cusolver-cu12", "nvidia-cusparse-cu12"]
+minimum-jaxlib = ["jaxlib (==0.4.11)"]
+tpu = ["jaxlib (==0.4.12)", "libtpu-nightly (==0.1.dev20230608)"]
 
 [[package]]
 name = "jedi"
@@ -1670,28 +1670,28 @@ traitlets = "*"
 
 [[package]]
 name = "ml-dtypes"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "ml_dtypes-0.1.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:377f2d5cfbf809b59188e0bfda4a0774e658541f575b637fee4850d99c2f9fdc"},
-    {file = "ml_dtypes-0.1.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:87aa1cf83d41fed5a40fc27ee57ac4c1bf904e940f082531d3d58f1c318b5928"},
-    {file = "ml_dtypes-0.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dee8ea629b8e3e20c6649852c1b9deacfa13384ab9337f2c9e717e401d102f23"},
-    {file = "ml_dtypes-0.1.0-cp310-cp310-win_amd64.whl", hash = "sha256:ad765159ac6c18d5ee7d325fcf34d3106a9d9d7a49713d998f5cfa330a1459b4"},
-    {file = "ml_dtypes-0.1.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:b9c5578dffd85637a7dd437192de18bc1a14eb6ba7d53ef40de3f84c51c789e5"},
-    {file = "ml_dtypes-0.1.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:36e8518c8fd2c38729f020125f39ef07b045f5c16d0846320c7252d7773285ee"},
-    {file = "ml_dtypes-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:99fab8262d175c49bf1655c229244f301274e8289449c350ba4d5b95ade07d9a"},
-    {file = "ml_dtypes-0.1.0-cp311-cp311-win_amd64.whl", hash = "sha256:8de9bbf5bed587a1166699447ea14d1e8fe66d4e812811e37bf2f4d988475476"},
-    {file = "ml_dtypes-0.1.0-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:a29fbf128583673eca0f43def1dbe77e02c1e8b8a8331db2877bbb57d091ef11"},
-    {file = "ml_dtypes-0.1.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:273c306db846005b83a98c9c7ec3dc8fa20e8f11c3772c8e8c20cc12d8abfd4b"},
-    {file = "ml_dtypes-0.1.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:41b6beeaea47e2466b94068664c9a45b2a65dd023aa4e5deeb5a73303661344e"},
-    {file = "ml_dtypes-0.1.0-cp38-cp38-win_amd64.whl", hash = "sha256:2de6c81b0da398d54aabdd7de599f2dfc43e30b65d9fad379a69f4cc4ae165d3"},
-    {file = "ml_dtypes-0.1.0-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:77970beeb3cf6ac559c4b6b393f24778a5abd34fafbaad82d5a0d17d0f148936"},
-    {file = "ml_dtypes-0.1.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ffb7882dd46399217dc54f37affc899e0a29a4cfb63e5bf733ac0baf4a179c77"},
-    {file = "ml_dtypes-0.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8c5c9fe086756fbc1bf51296431d64429536093cf6e2ba592e042d7fc07c8514"},
-    {file = "ml_dtypes-0.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:c9218175b06764b8ddc95cb18d11a6c4b48a4b103a31c9ea2b2c3cd0cfc369f8"},
-    {file = "ml_dtypes-0.1.0.tar.gz", hash = "sha256:c1fc0afe63ce99069f9d7e0693a61cfd0aea90241fc3821af9953d0c11f4048a"},
+    {file = "ml_dtypes-0.2.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:df6a76e1c8adf484feb138ed323f9f40a7b6c21788f120f7c78bec20ac37ee81"},
+    {file = "ml_dtypes-0.2.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bc29a0524ef5e23a7fbb8d881bdecabeb3fc1d19d9db61785d077a86cb94fab2"},
+    {file = "ml_dtypes-0.2.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f08c391c2794f2aad358e6f4c70785a9a7b1df980ef4c232b3ccd4f6fe39f719"},
+    {file = "ml_dtypes-0.2.0-cp310-cp310-win_amd64.whl", hash = "sha256:75015818a7fccf99a5e8ed18720cb430f3e71a8838388840f4cdf225c036c983"},
+    {file = "ml_dtypes-0.2.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:e70047ec2c83eaee01afdfdabee2c5b0c133804d90d0f7db4dd903360fcc537c"},
+    {file = "ml_dtypes-0.2.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:36d28b8861a8931695e5a31176cad5ae85f6504906650dea5598fbec06c94606"},
+    {file = "ml_dtypes-0.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e85ba8e24cf48d456e564688e981cf379d4c8e644db0a2f719b78de281bac2ca"},
+    {file = "ml_dtypes-0.2.0-cp311-cp311-win_amd64.whl", hash = "sha256:832a019a1b6db5c4422032ca9940a990fa104eee420f643713241b3a518977fa"},
+    {file = "ml_dtypes-0.2.0-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:8faaf0897942c8253dd126662776ba45f0a5861968cf0f06d6d465f8a7bc298a"},
+    {file = "ml_dtypes-0.2.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:35b984cddbe8173b545a0e3334fe56ea1a5c3eb67c507f60d0cfde1d3fa8f8c2"},
+    {file = "ml_dtypes-0.2.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:022d5a4ee6be14569c2a9d1549e16f1ec87ca949681d0dca59995445d5fcdd5b"},
+    {file = "ml_dtypes-0.2.0-cp38-cp38-win_amd64.whl", hash = "sha256:50845af3e9a601810751b55091dee6c2562403fa1cb4e0123675cf3a4fc2c17a"},
+    {file = "ml_dtypes-0.2.0-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:f00c71c8c63e03aff313bc6a7aeaac9a4f1483a921a6ffefa6d4404efd1af3d0"},
+    {file = "ml_dtypes-0.2.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:80d304c836d73f10605c58ccf7789c171cc229bfb678748adfb7cea2510dfd0e"},
+    {file = "ml_dtypes-0.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:32107e7fa9f62db9a5281de923861325211dfff87bd23faefb27b303314635ab"},
+    {file = "ml_dtypes-0.2.0-cp39-cp39-win_amd64.whl", hash = "sha256:1749b60348da71fd3c2ab303fdbc1965958dc50775ead41f5669c932a341cafd"},
+    {file = "ml_dtypes-0.2.0.tar.gz", hash = "sha256:6488eb642acaaf08d8020f6de0a38acee7ac324c1e6e92ee0c0fea42422cb797"},
 ]
 
 [package.dependencies]
@@ -3266,13 +3266,13 @@ files = [
 
 [[package]]
 name = "websocket-client"
-version = "1.5.2"
+version = "1.5.3"
 description = "WebSocket client for Python with low level API options"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "websocket-client-1.5.2.tar.gz", hash = "sha256:c7d67c13b928645f259d9b847ab5b57fd2d127213ca41ebd880de1f553b7c23b"},
-    {file = "websocket_client-1.5.2-py3-none-any.whl", hash = "sha256:f8c64e28cd700e7ba1f04350d66422b6833b82a796b525a51e740b8cc8dab4b1"},
+    {file = "websocket-client-1.5.3.tar.gz", hash = "sha256:b96f3bce3e54e3486ebe6504bc22bd4c140392bd2eb71764db29be8f2639aa65"},
+    {file = "websocket_client-1.5.3-py3-none-any.whl", hash = "sha256:3566f8467cd350874c4913816355642a4942f6c1ed1e9406e3d42fae6d6c072a"},
 ]
 
 [package.extras]
@@ -3282,13 +3282,13 @@ test = ["websockets"]
 
 [[package]]
 name = "werkzeug"
-version = "2.3.4"
+version = "2.3.6"
 description = "The comprehensive WSGI web application library."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Werkzeug-2.3.4-py3-none-any.whl", hash = "sha256:48e5e61472fee0ddee27ebad085614ebedb7af41e88f687aaf881afb723a162f"},
-    {file = "Werkzeug-2.3.4.tar.gz", hash = "sha256:1d5a58e0377d1fe39d061a5de4469e414e78ccb1e1e59c0f5ad6fa1c36c52b76"},
+    {file = "Werkzeug-2.3.6-py3-none-any.whl", hash = "sha256:935539fa1413afbb9195b24880778422ed620c0fc09670945185cce4d91a8890"},
+    {file = "Werkzeug-2.3.6.tar.gz", hash = "sha256:98c774df2f91b05550078891dee5f0eb0cb797a522c757a2452b9cee5b202330"},
 ]
 
 [package.dependencies]

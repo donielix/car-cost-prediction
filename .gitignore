@@ -9,3 +9,4 @@
 **/*.zip
 **/.cache
 **/.mypy_cache
+**/*.env

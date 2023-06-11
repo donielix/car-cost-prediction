@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - pg_data_mlflow:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  mlflow:
+    restart: on-failure
+    build:
+      dockerfile: mlflow.dockerfile
+      context: .
+    image: mlflow
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    volumes:
+      - mlflow_artifacts:/home/mlflow/artifacts
+
+volumes:
+  pg_data_mlflow:
+  mlflow_artifacts:

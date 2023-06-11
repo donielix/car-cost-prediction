@@ -11,7 +11,6 @@ RUN pip install -U pip setuptools wheel && \
 
 COPY poetry.lock pyproject.toml README.md ./
 COPY src/ ./src/
-RUN chmod +x src/models/exponential/train.py
 
 RUN poetry install --no-dev
 ENTRYPOINT [ "poetry", "run", "src/models/exponential/train.py" ]
