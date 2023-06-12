@@ -1,4 +1,6 @@
+import grp
 import os
+import pwd
 from functools import reduce
 from pathlib import Path
 from typing import Dict, Optional, Union
@@ -152,8 +154,16 @@ def get_owner_and_group_ids(directory_path: Union[str, Path]) -> Dict[str, str]:
     # Check if the directory exists
     if directory.exists():
         # Retrieve the owner ID and group ID
-        owner_id = directory.owner()
-        group_id = directory.group()
+        owner_uid = os.stat(directory).st_uid
+        group_gid = os.stat(directory).st_gid
+        try:
+            owner_id = pwd.getpwuid(owner_uid).pw_name
+        except KeyError:
+            owner_id = str(owner_uid)
+        try:
+            group_id = grp.getgrgid(group_gid).gr_name
+        except KeyError:
+            group_id = str(group_gid)
 
         # Return a dictionary containing the owner ID and group ID
         return {"owner_id": owner_id, "group_id": group_id}

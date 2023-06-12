@@ -3,4 +3,16 @@
 # An instance of PostgreSQL must be running on port 5432
 set -e
 
-mlflow server --backend-store-uri postgresql://mlflow:mlflow@localhost:5432/mlflowdb --default-artifact-root s3://citroen-cost-prediction/artifacts
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+if ! command -v docker-compose &> /dev/null
+then
+    COMPOSE_COMMAND="docker compose"
+else
+    COMPOSE_COMMAND="docker-compose"
+fi
+
+cd "${ROOT_DIR}/mlflow"
+
+$COMPOSE_COMMAND -f "docker-compose.yml" build > /dev/null
+$COMPOSE_COMMAND -f "docker-compose.yml" up -d
