@@ -68,7 +68,11 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
         self.X_ = X
         self.y_ = y
         self.best_params_, pcov = curve_fit(
-            self._model_func, xdata=X, ydata=y, p0=self.initial_params
+            self._model_func,
+            xdata=X,
+            ydata=y,
+            p0=self.initial_params,
+            maxfev=5000,
         )
         self.estimation_err_ = np.sqrt(np.diag(pcov))
         self.cond_ = np.linalg.cond(pcov)
@@ -84,9 +88,8 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
 
 
 def parse_args() -> argparse.Namespace:
-    rnd = np.random.RandomState(42)
     default_data_path = os.path.join(os.getcwd(), "data")
-    default_init_params = rnd.uniform(-1, 1, size=4)
+    default_init_params = np.random.uniform(-5, 5, size=4)
     parser = argparse.ArgumentParser(
         prog="Training script",
         description="Fits the model according to the data passed",
@@ -167,6 +170,7 @@ def main():
         logger.debug(f"Data folder permissions: {get_folder_permissions('data')}")
         logger.debug(f"Data folder owner: {get_owner_and_group_ids('data')}")
         mlflow.log_artifact("data")
+        mlflow.log_param("initial_points", args.initial_params)
         mlflow.log_param("best_params", model.best_params_)
         mlflow.log_param("estimation_err", model.estimation_err_)
         mlflow.log_param("condition_number", model.cond_)
