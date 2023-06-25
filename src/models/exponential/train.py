@@ -83,6 +83,9 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
 
 
 def parse_args() -> argparse.Namespace:
+    rnd = np.random.RandomState(42)
+    default_data_path = os.path.join(os.getcwd(), "data")
+    default_init_params = rnd.uniform(-1, 1, size=4)
     parser = argparse.ArgumentParser(
         prog="Training script",
         description="Fits the model according to the data passed",
@@ -93,17 +96,18 @@ def parse_args() -> argparse.Namespace:
         "-i",
         "--initial-params",
         type=ast.literal_eval,
-        required=True,
-        help="Initial parameters",
+        required=False,
+        default=default_init_params,
+        help=f"Initial parameters. Default: {default_init_params}",
     )
 
     parser.add_argument(
         "-d",
         "--data",
         type=str,
-        default=os.path.join(os.getcwd(), "data"),
+        default=default_data_path,
         required=False,
-        help="Where to load data from",
+        help=f"Where to load data from. Default: {default_data_path}",
     )
 
     parser.add_argument(
@@ -112,7 +116,7 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default="train.parquet",
         required=False,
-        help="The name of the training dataset",
+        help="The name of the training dataset. Default: train.parquet",
     )
 
     parser.add_argument(
@@ -121,7 +125,7 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default="test.parquet",
         required=False,
-        help="The name of the validation dataset",
+        help="The name of the validation dataset. Default: test.parquet",
     )
 
     parser.add_argument(

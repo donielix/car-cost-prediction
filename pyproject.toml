@@ -27,6 +27,7 @@ mypy = "*"
 
 [tool.poetry.scripts]
 pull = "src.data.pull:main"
+train_exponential = "src.models.exponential.train:main"
 
 [build-system]
 requires = ["poetry-core"]
