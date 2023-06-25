@@ -11,7 +11,7 @@ import mlflow.sklearn
 import numpy as np
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
 import mlflow
@@ -71,6 +71,7 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
             self._model_func, xdata=X, ydata=y, p0=self.initial_params
         )
         self.estimation_err_ = np.sqrt(np.diag(pcov))
+        self.cond_ = np.linalg.cond(pcov)
         # Return the classifier
         return self
 
@@ -161,12 +162,17 @@ def main():
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
         scoring = mean_squared_error(y_true=y_test, y_pred=y_pred)
+        r2 = r2_score(y_true=y_test, y_pred=y_pred)
+        maximum_error = np.max(np.abs(y_pred - y_test))
         logger.debug(f"Data folder permissions: {get_folder_permissions('data')}")
         logger.debug(f"Data folder owner: {get_owner_and_group_ids('data')}")
         mlflow.log_artifact("data")
         mlflow.log_param("best_params", model.best_params_)
         mlflow.log_param("estimation_err", model.estimation_err_)
+        mlflow.log_param("condition_number", model.cond_)
         mlflow.log_metric("MSE", scoring)
+        mlflow.log_metric("r2", r2)
+        mlflow.log_metric("maximum_error", maximum_error)
         mlflow.sklearn.log_model(sk_model=model, artifact_path="model")
     logger.info("Training completed!")
 
