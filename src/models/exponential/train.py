@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 import argparse
-import ast
 import getpass
 import logging
 import os
 import platform
-from typing import List
+from typing import Dict
 
 import mlflow.sklearn
 import numpy as np
+from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 from scipy.optimize import curve_fit
 from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import make_scorer, mean_squared_error, r2_score
+from sklearn.model_selection import cross_val_score
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
 import mlflow
@@ -48,8 +49,11 @@ def setup_logger() -> logging.Logger:
 
 
 class ExponentialModel(BaseEstimator, RegressorMixin):
-    def __init__(self, initial_params: List[float]) -> None:
-        self.initial_params = initial_params
+    def __init__(self, w0: float, w1: float, w2: float, w3: float) -> None:
+        self.w0 = w0
+        self.w1 = w1
+        self.w2 = w2
+        self.w3 = w3
 
     @staticmethod
     def _model_func(x, w0, w1, w2, w3):
@@ -71,7 +75,7 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
             self._model_func,
             xdata=X,
             ydata=y,
-            p0=self.initial_params,
+            p0=[getattr(self, f"w{i}") for i in range(4)],
             maxfev=10000,
         )
         self.estimation_err_ = np.sqrt(np.diag(pcov))
@@ -89,20 +93,10 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
 
 def parse_args() -> argparse.Namespace:
     default_data_path = os.path.join(os.getcwd(), "data")
-    default_init_params = np.random.uniform(-5, 5, size=4)
     parser = argparse.ArgumentParser(
         prog="Training script",
         description="Fits the model according to the data passed",
         epilog="End of help",
-    )
-
-    parser.add_argument(
-        "-i",
-        "--initial-params",
-        type=ast.literal_eval,
-        required=False,
-        default=default_init_params,
-        help=f"Initial parameters. Default: {default_init_params}",
     )
 
     parser.add_argument(
@@ -143,6 +137,39 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
+def hyperparameter_optimization(X_train, y_train):
+    scorer = make_scorer(score_func=mean_squared_error, greater_is_better=False)
+
+    def objective(params: Dict) -> Dict:
+        model = ExponentialModel(**params)
+        score = cross_val_score(
+            estimator=model,
+            X=X_train,
+            y=y_train,
+            scoring=scorer,
+            n_jobs=-1,
+        ).mean()
+        return {"loss": -score, "status": STATUS_OK}
+
+    space = {
+        "w0": hp.uniform("w0", 0, 10),
+        "w1": hp.normal("w1", 0, 15),
+        "w2": hp.normal("w2", 0, 15),
+        "w3": hp.normal("w3", 0, 15),
+    }
+    trials = Trials()
+    best = fmin(
+        objective,
+        space,
+        algo=tpe.suggest,
+        max_evals=500,
+        verbose=False,
+        show_progressbar=True,
+        trials=trials,
+    )
+    return best, trials
+
+
 def main():
     TARGET_FIELD = "coste"
     logger = setup_logger()
@@ -150,7 +177,6 @@ def main():
     logger.debug(f"Current host: {platform.node()}")
     args = parse_args()
     logger.debug(f"Input arguments: {args}")
-    logger.info(f"Initial params: {args.initial_params}")
     train = read_parquet_or_csv(path=join_path(args.data, args.train_name, sep="/"))
     test = read_parquet_or_csv(path=join_path(args.data, args.validation_name, sep="/"))
     logger.debug(f"Train dataset size: {len(train)}\nTest dataset size: {len(test)}")
@@ -161,7 +187,8 @@ def main():
     if args.mlflow_tracking:
         mlflow.set_tracking_uri(args.mlflow_tracking)
     with mlflow.start_run() as run:  # noqa: F841
-        model = ExponentialModel(initial_params=args.initial_params)
+        best, trials = hyperparameter_optimization(X_train=X_train, y_train=y_train)
+        model = ExponentialModel(**best)
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
         scoring = mean_squared_error(y_true=y_test, y_pred=y_pred)
@@ -170,7 +197,6 @@ def main():
         logger.debug(f"Data folder permissions: {get_folder_permissions('data')}")
         logger.debug(f"Data folder owner: {get_owner_and_group_ids('data')}")
         mlflow.log_artifact("data")
-        mlflow.log_param("initial_points", args.initial_params)
         mlflow.log_param("best_params", model.best_params_)
         mlflow.log_param("estimation_err", model.estimation_err_)
         mlflow.log_param("condition_number", model.cond_)
