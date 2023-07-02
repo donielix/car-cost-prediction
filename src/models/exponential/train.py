@@ -72,7 +72,7 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
             xdata=X,
             ydata=y,
             p0=self.initial_params,
-            maxfev=5000,
+            maxfev=10000,
         )
         self.estimation_err_ = np.sqrt(np.diag(pcov))
         self.cond_ = np.linalg.cond(pcov)
