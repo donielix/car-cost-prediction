@@ -1,5 +1,15 @@
 {
+  "version": "0.2.0",
   "configurations": [
+    {
+      "name": "Test",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "purpose": ["debug-test"],
+      "justMyCode": false
+    },
     {
       "name": "Training",
       "type": "python",
@@ -7,7 +17,7 @@
       "program": "${workspaceFolder}/src/models/exponential/train.py",
       "console": "integratedTerminal",
       "justMyCode": false,
-      "args": ["-i", "[.1, .2, .3, .4]", "-m", "http://localhost:5000"]
+      "args": ["-m", "http://localhost:5000"]
     }
   ]
 }

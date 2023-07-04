@@ -137,7 +137,7 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def hyperparameter_optimization(X_train, y_train):
+def hyperparameter_optimization(X_train, y_train, max_evals=1000):
     scorer = make_scorer(score_func=mean_squared_error, greater_is_better=False)
 
     def objective(params: Dict) -> Dict:
@@ -153,8 +153,8 @@ def hyperparameter_optimization(X_train, y_train):
 
     space = {
         "w0": hp.uniform("w0", 0, 10),
-        "w1": hp.normal("w1", 0, 15),
-        "w2": hp.normal("w2", 0, 15),
+        "w1": hp.uniform("w1", 0, 15),
+        "w2": hp.uniform("w2", 0, 15),
         "w3": hp.normal("w3", 0, 15),
     }
     trials = Trials()
@@ -162,7 +162,7 @@ def hyperparameter_optimization(X_train, y_train):
         objective,
         space,
         algo=tpe.suggest,
-        max_evals=500,
+        max_evals=max_evals,
         verbose=False,
         show_progressbar=True,
         trials=trials,
