@@ -20,7 +20,7 @@ def train_test():
 def test_exponential(train_test):
     X_train, y_train, X_test, y_test = train_test
     best, trials = hyperparameter_optimization(
-        X_train=X_train, y_train=y_train, max_evals=100
+        model=ExponentialModel, X_train=X_train, y_train=y_train, max_evals=100
     )
     model = ExponentialModel(**best)
     model.fit(X_train, y_train)

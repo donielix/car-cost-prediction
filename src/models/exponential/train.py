@@ -24,8 +24,6 @@ from src.utils.read import (
 )
 from src.utils.split import split_X_y_df
 
-logging.basicConfig(level=logging.DEBUG)
-
 
 def setup_logger() -> logging.Logger:
     # Set up logger
@@ -49,7 +47,13 @@ def setup_logger() -> logging.Logger:
 
 
 class ExponentialModel(BaseEstimator, RegressorMixin):
-    def __init__(self, w0: float, w1: float, w2: float, w3: float) -> None:
+    def __init__(
+        self,
+        w0: float = 0.0,
+        w1: float = 0.0,
+        w2: float = 0.0,
+        w3: float = 0.0,
+    ) -> None:
         self.w0 = w0
         self.w1 = w1
         self.w2 = w2
@@ -137,13 +141,13 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def hyperparameter_optimization(X_train, y_train, max_evals=1000):
+def hyperparameter_optimization(model, X_train, y_train, max_evals=1000):
     scorer = make_scorer(score_func=mean_squared_error, greater_is_better=False)
 
     def objective(params: Dict) -> Dict:
-        model = ExponentialModel(**params)
+        estimator = model(**params)
         score = cross_val_score(
-            estimator=model,
+            estimator=estimator,
             X=X_train,
             y=y_train,
             scoring=scorer,
@@ -187,7 +191,9 @@ def main():
     if args.mlflow_tracking:
         mlflow.set_tracking_uri(args.mlflow_tracking)
     with mlflow.start_run() as run:  # noqa: F841
-        best, trials = hyperparameter_optimization(X_train=X_train, y_train=y_train)
+        best, trials = hyperparameter_optimization(
+            model=ExponentialModel, X_train=X_train, y_train=y_train
+        )
         model = ExponentialModel(**best)
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
@@ -208,4 +214,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     main()
