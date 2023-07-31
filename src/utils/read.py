@@ -42,7 +42,6 @@ def read_parquet_or_csv(path: str, **kwargs) -> pd.DataFrame:
     >>> df = read_parquet_or_csv("data/file.csv", sep=",")
     >>> df = read_parquet_or_csv("s3://bucket/file.parquet")
     >>> df = read_parquet_or_csv("s3://bucket/file.csv", sep=",")
-
     """
     if path.startswith("s3://"):
         try:

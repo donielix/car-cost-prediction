@@ -16,6 +16,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
 import mlflow
+from src.utils.decorators import delete_fitted_attributes_if_error
 from src.utils.read import (
     get_folder_permissions,
     get_owner_and_group_ids,
@@ -69,12 +70,13 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
         price = consumption * distance * fuel_price
         return price
 
+    @delete_fitted_attributes_if_error
     def fit(self, X, y):
-        # Check that X and y have correct shape
-        X, y = check_X_y(X, y)
-        # Store the classes seen during fit
+        # Store the data seen during fit
         self.X_ = X
         self.y_ = y
+        # Check that X and y have correct shape
+        X, y = check_X_y(X, y)
         self.best_params_, pcov = curve_fit(
             self._model_func,
             xdata=X,
