@@ -16,6 +16,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
 
 import mlflow
+from src.models.exponential.preprocessing import ColumnDropperTransformer
 from src.utils.decorators import delete_fitted_attributes_if_error
 from src.utils.read import (
     get_folder_permissions,
@@ -186,6 +187,10 @@ def main():
     train = read_parquet_or_csv(path=join_path(args.data, args.train_name, sep="/"))
     test = read_parquet_or_csv(path=join_path(args.data, args.validation_name, sep="/"))
     logger.debug(f"Train dataset size: {len(train)}\nTest dataset size: {len(test)}")
+    logger.debug("Preprocessing data...")
+    dropper = ColumnDropperTransformer(columns=["consumo_medio"])
+    train = dropper.transform(train)
+    test = dropper.transform(test)
 
     X_train, y_train, X_test, y_test = split_X_y_df(
         train=train, test=test, target=TARGET_FIELD
