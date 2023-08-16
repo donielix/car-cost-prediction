@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Journey cost estimation</title>
+    </head>
+
+    <body>
+        <form name="form", method="POST", style="text-align: center;">
+            <br>
+            Distance: <input type="number" name="distance" step="0.01", placeholder="Enter distance in km" required/>
+            <br><br>
+            Fuel price: <input type="number" name="fuel_price" step="0.01", placeholder="Enter fuel price in €" required/>
+            <br><br>
+            <button value="Submit">Run</button>
+        </form>
+        <p style="text-align: center;">You estimated cost is: {{ output }} €</p>
+    </body>
+</html>

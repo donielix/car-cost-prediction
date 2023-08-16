@@ -18,6 +18,14 @@
       "console": "integratedTerminal",
       "justMyCode": false,
       "args": ["-m", "http://localhost:5000"]
+    },
+    {
+      "name": "API",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/models/exponential/api/api.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
     }
   ]
 }

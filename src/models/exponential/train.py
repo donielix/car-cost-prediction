@@ -97,6 +97,18 @@ class ExponentialModel(BaseEstimator, RegressorMixin):
         X = check_array(X)
         return self._model_func(X, *self.best_params_)
 
+    def predict_endpoint(
+        self, distance: float, mileage: float, fuel_price: float, precision: int = 3
+    ) -> float:
+        # Check if fit has been called
+        check_is_fitted(self)
+        X = np.array([[distance, mileage, fuel_price]], dtype=np.float64)
+        # Input validation
+        X = check_array(X)
+        return round(
+            number=float(self._model_func(X, *self.best_params_)), ndigits=precision
+        )
+
 
 def parse_args() -> argparse.Namespace:
     default_data_path = os.path.join(os.getcwd(), "data")
@@ -217,6 +229,9 @@ def main():
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("maximum_error", maximum_error)
         mlflow.sklearn.log_model(sk_model=model, artifact_path="model")
+        mlflow.artifacts.download_artifacts(
+            artifact_uri=run.info.artifact_uri + "/model/", dst_path="model/"
+        )
     logger.info("Training completed!")
 
 
