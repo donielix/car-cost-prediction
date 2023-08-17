@@ -22,11 +22,33 @@ resource "hcloud_server" "costprediction" {
 }
 
 # Create a new SSH key
+
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+
+resource "local_file" "ssh_private_key_pem" {
+  content         = tls_private_key.ssh.private_key_pem
+  filename        = "${path.module}/.ssh/hetzner_private_key"
+  file_permission = "0600"
+}
+
+resource "local_file" "ssh_public_key_pem" {
+  content  = tls_private_key.ssh.public_key_openssh
+  filename = "${path.module}/.ssh/hetzner_public_key"
+}
+
 resource "hcloud_ssh_key" "cost_prediction_ssh" {
   name       = "cost_prediction_ssh"
-  public_key = file("~/.ssh/id_ed25519.pub")
+  public_key = local_file.ssh_public_key_pem.content
 }
 
 output "website" {
   value = "${hcloud_server.costprediction.ipv4_address}:8000"
+}
+
+output "ssh" {
+  value = "ssh -i ${local_file.ssh_private_key_pem.filename} root@${hcloud_server.costprediction.ipv4_address}"
 }

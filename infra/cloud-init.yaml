@@ -27,4 +27,4 @@ runcmd:
     cd car-cost-prediction/
     dvc pull model
     docker build -t citroen-cost-prediction .
-    docker run -d --name citroen-cost-prediction -p 8000:8000 -v model/:/code/model/:ro citroen-cost-prediction
+    docker run -d --name citroen-cost-prediction -p 8000:8000 -v ./model/:/code/model/:ro citroen-cost-prediction
