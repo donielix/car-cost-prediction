@@ -3,6 +3,7 @@ import pytest
 from sklearn.metrics import mean_squared_error, r2_score
 
 from src.models.exponential.base import ExponentialModel
+from src.models.exponential.preprocessing import ColumnDropperTransformer
 from src.models.exponential.train import hyperparameter_optimization
 from src.utils.read import join_path, read_parquet_or_csv
 from src.utils.split import split_X_y_df
@@ -12,6 +13,9 @@ from src.utils.split import split_X_y_df
 def train_test():
     train = read_parquet_or_csv(path=join_path("data", "train.parquet", sep="/"))
     test = read_parquet_or_csv(path=join_path("data", "test.parquet", sep="/"))
+    dropper = ColumnDropperTransformer(columns=["consumo_medio"])
+    train = dropper.transform(train)
+    test = dropper.transform(test)
     X_train, y_train, X_test, y_test = split_X_y_df(
         train=train, test=test, target="coste"
     )
@@ -20,6 +24,7 @@ def train_test():
 
 def test_exponential(train_test):
     X_train, y_train, X_test, y_test = train_test
+
     best, trials = hyperparameter_optimization(
         model=ExponentialModel, X_train=X_train, y_train=y_train, max_evals=100
     )
