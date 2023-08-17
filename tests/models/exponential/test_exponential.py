@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 from sklearn.metrics import mean_squared_error, r2_score
 
-from src.models.exponential.train import ExponentialModel, hyperparameter_optimization
+from src.models.exponential.base import ExponentialModel
+from src.models.exponential.train import hyperparameter_optimization
 from src.utils.read import join_path, read_parquet_or_csv
 from src.utils.split import split_X_y_df
 

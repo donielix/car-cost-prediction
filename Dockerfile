@@ -13,4 +13,4 @@ COPY poetry.lock pyproject.toml README.md ./
 COPY src/ ./src/
 
 RUN poetry install --no-dev
-ENTRYPOINT [ "poetry", "run", "src/models/exponential/train.py" ]
+CMD [ "poetry", "run", "api" ]

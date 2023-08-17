@@ -3,9 +3,16 @@
 .dvc/tmp/
 .mypy_cache/
 .vscode/
+.venv/
+*.dvc
+.ipynb_checkpoints/
 data/
+model/
 db/
 infra/
 notebooks/
 scripts/
 .dockerignore
+**/__pycache__/
+tests/
+mlruns/
